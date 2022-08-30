@@ -24,14 +24,6 @@ function App() {
 
     const removeTask = (id: string) => setTasks(tasks.filter(t => t.id !== id));
     const addTask = (taskName: string) => setTasks([{id: v1(), taskName, isDone: false}, ...tasks]);
-    const toggleIsDone = (id: string) => {
-        setTasks(tasks.map(t => {
-            if (t.id === id) {
-                return {...t, isDone: !t.isDone}
-            }
-            return t;
-        }));
-    }
     const getFilteredTasks = () => {
         switch (filter) {
             case "active":
@@ -54,8 +46,7 @@ function App() {
                 tasks={filteredTasks}
                 removeTask={removeTask}
                 addTask={addTask}
-                changeFilter={(filter) => setFilter(filter)}
-                toggleIsDone={toggleIsDone}/>
+                changeFilter={(filter) => setFilter(filter)}/>
         </div>
     );
 }

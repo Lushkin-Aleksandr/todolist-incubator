@@ -6,7 +6,6 @@ type TodoListPropsType = {
     removeTask: (id: string) => void
     addTask: (taskName: string) => void
     changeFilter: (filterValue: FilterType) => void
-    toggleIsDone: (id: string) => void
 }
 
 const TodoList = (props: TodoListPropsType) => {
@@ -16,11 +15,10 @@ const TodoList = (props: TodoListPropsType) => {
         ? <span>Add first task</span>
         : props.tasks.map(t => {
             const onRemoveTaskBtnClick = () => props.removeTask(t.id)
-            const toggleCheckBox = () => props.toggleIsDone(t.id);
 
             return (
                 <li key={t.id}>
-                    <input type={"checkbox"} onChange={toggleCheckBox} checked={t.isDone}/>
+                    <input type={"checkbox"} checked={t.isDone}/>
                     <span>{t.taskName} </span>
                     <button onClick={onRemoveTaskBtnClick}>x</button>
                 </li>

@@ -6,3 +6,29 @@
 .App > div {
   margin-right: 50px;
 }
+
+.isDone {
+  color: red;
+  text-decoration: line-through;
+  opacity: .3;
+}
+
+.btn {
+  border: none;
+  margin-right: 5px;
+  padding: 5px;
+  background-color: gray;
+  color: white;
+}
+
+.activeBtn {
+  background-color: #00ce00;
+}
+
+.requiredError {
+  border: 1px solid red;
+}
+
+.errorText {
+  color: red;
+}

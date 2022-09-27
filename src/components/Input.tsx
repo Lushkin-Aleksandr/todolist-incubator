@@ -1,11 +1,13 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {Button, IconButton, TextField} from "@material-ui/core";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-type InputPropsType={
-    callBack:(newTitle:string)=>void
+type InputPropsType = {
+    callBack: (newTitle: string) => void
 }
 
 
-export const Input = (props:InputPropsType) => {
+export const Input = (props: InputPropsType) => {
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
@@ -32,13 +34,20 @@ export const Input = (props:InputPropsType) => {
 
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyPress={onKeyPressHandler}
-                   className={error ? "error" : ""}
+            <TextField
+                variant={"outlined"}
+                label={'Title'}
+                value={title}
+                onChange={onChangeHandler}
+                onKeyPress={onKeyPressHandler}
+                error={!!error}
+                helperText={error}
             />
-            <button onClick={addTask}>+</button>
-            {error && <div className="error-message">{error}</div>}
+            <IconButton
+                color={'primary'}
+                onClick={addTask}>
+                <AddCircleIcon/>
+            </IconButton>
         </div>
     );
 };

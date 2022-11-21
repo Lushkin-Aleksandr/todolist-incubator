@@ -1,7 +1,14 @@
 import {TasksStateType} from '../App';
 import {v1} from 'uuid';
 import {AddTodolistActionType, RemoveTodolistActionType, setTodolists, SetTodosActionType} from './todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/todolists-api'
+import {
+    TaskPriorities,
+    TaskStatuses,
+    TaskType,
+    todolistsAPI,
+    TodolistType,
+    UpdateTaskModelType
+} from '../api/todolists-api'
 import {Dispatch} from "redux";
 import {AppDispatchType, AppRootStateType} from "./store";
 
@@ -106,7 +113,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         case 'ADD-TODOLIST': {
             return {
                 ...state,
-                [action.todolistId]: []
+                [action.payload.todolist.id]: []
             }
         }
         case 'REMOVE-TODOLIST': {
@@ -179,7 +186,7 @@ export const createTaskTC = (todolistId: string, title: string) => (dispatch: Ap
         })
 }
 
-export const updateTaskTC = (todolistId: string, taskId: string, status: TaskStatuses) => (dispatch: AppDispatchType, getState: () => AppRootStateType) => {
+export const updateTaskTC = (todolistId: string, taskId: string, key: keyof TaskType, value: TaskType[keyof TaskType]) => (dispatch: AppDispatchType, getState: () => AppRootStateType) => {
     const task = getState().tasks[todolistId].find(t => t.id === taskId);
 
     if (task) {
@@ -189,14 +196,25 @@ export const updateTaskTC = (todolistId: string, taskId: string, status: TaskSta
             startDate: task.startDate,
             priority: task.priority,
             description: task.description,
-            status: status
+            status: task.status,
+            [key]: value
         }
 
         todolistsAPI.updateTask(todolistId, taskId, model)
             .then(res => {
-                dispatch(changeTaskStatusAC(taskId, res.data.data.item.status, todolistId))
+                switch (key) {
+                    case 'status': {
+                        dispatch(changeTaskStatusAC(taskId, res.data.data.item.status, todolistId))
+                        break
+                    }
+                    case "title": {
+                        dispatch(changeTaskTitleAC(taskId, res.data.data.item.title, todolistId))
+                        break
+                    }
+                }
             })
     }
-
 }
+
+
 

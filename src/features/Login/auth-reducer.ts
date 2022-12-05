@@ -1,65 +1,68 @@
 import {Dispatch} from 'redux'
-import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer'
-import {authAPI, LoginDataType, ResultCode} from "../../api/todolists-api";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import axios from "axios";
-import {clearTodosDataAC, ClearTodosDataActionType} from "../TodolistsList/todolists-reducer";
+import {setAppStatusAC} from '../../app/app-reducer'
+import {authAPI, LoginParamsType} from '../../api/todolists-api'
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState = {
-    isLoggedIn: false
-}
-type InitialStateType = typeof initialState
-
-export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-    switch (action.type) {
-        case 'login/SET-IS-LOGGED-IN':
-            return {...state, isLoggedIn: action.value}
-        default:
-            return state
-    }
-}
-// actions
-export const setIsLoggedInAC = (value: boolean) =>
-    ({type: 'login/SET-IS-LOGGED-IN', value} as const)
-
-// thunks
-export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch<ActionsType>) => {
-    try {
-        dispatch(setAppStatusAC('loading'))
-        const res = await authAPI.login(data)
-        if (res.data.resultCode === ResultCode.OK) {
-            dispatch(setIsLoggedInAC(true))
-        } else {
-            handleServerAppError(res.data, dispatch)
-        }
-    } catch (e) {
-        if (axios.isAxiosError<ResponseType>(e)) {
-            handleServerNetworkError(e, dispatch)
-        }
-    }
-}
-
-export const logoutTC = () => async (dispatch: Dispatch<ActionsType>) => {
-    try {
-        dispatch(setAppStatusAC('loading'))
-        const res = await authAPI.logout()
-        if (res.data.resultCode === ResultCode.OK) {
-            dispatch(setIsLoggedInAC(false))
-            dispatch(clearTodosDataAC())
-            dispatch(setAppStatusAC('succeeded'))
-        } else {
-            handleServerAppError(res.data, dispatch)
-        }
-    } catch (e) {
-        if (axios.isAxiosError<ResponseType>(e)) {
-            handleServerNetworkError(e, dispatch)
-        }
-    }
-}
 
 // types
-type ActionsType =
-    ReturnType<typeof setIsLoggedInAC>
-    | SetAppStatusActionType
-    | SetAppErrorActionType
-    | ClearTodosDataActionType
+type InitialStateType = {
+    isLoggedIn: boolean
+}
+
+const initialState: InitialStateType = {
+    isLoggedIn: false
+}
+
+export const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        setIsLoggedInAC(state, action: PayloadAction<{isLoggedIn: boolean}>) {
+            state.isLoggedIn = action.payload.isLoggedIn
+        }
+    }
+})
+
+
+// thunks
+export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC({status: 'loading'}))
+    authAPI.login(data)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC({isLoggedIn: true}))
+                dispatch(setAppStatusAC({status: 'succeeded'}))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
+}
+export const logoutTC = () => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC({status: 'loading'}))
+    authAPI.logout()
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC({isLoggedIn: false}))
+                dispatch(setAppStatusAC({status: 'succeeded'}))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
+}
+
+
+
+export const { setIsLoggedInAC } = authSlice.actions
+export const authReducer = authSlice.reducer
+
+
+
+
+

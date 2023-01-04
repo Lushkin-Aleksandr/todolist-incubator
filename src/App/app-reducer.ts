@@ -1,8 +1,6 @@
-import {Dispatch} from 'redux'
 import {authAPI} from '../api/todolists-api'
 import {setIsLoggedInAC} from '../features/Login/auth-reducer'
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -21,19 +19,12 @@ const initialState: InitialStateType = {
     isInitialized: false
 }
 
-// export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-//     switch (action.type) {
-//         case 'APP/SET-STATUS':
-//             return {...state, status: action.status}
-//         case 'APP/SET-ERROR':
-//             return {...state, error: action.error}
-//         case 'APP/SET-IS-INITIALIED':
-//             return {...state, isInitialized: action.value}
-//         default:
-//             return {...state}
-//     }
-// }
-
+export const initializeAppTC = createAsyncThunk('app/initializeApp', async (_, thunkAPI) => {
+    const res = await authAPI.me()
+    if (res.data.resultCode === 0) {
+        thunkAPI.dispatch(setIsLoggedInAC({isLoggedIn: true}));
+    }
+})
 
 export const appSlice = createSlice({
     name: 'app',
@@ -45,30 +36,22 @@ export const appSlice = createSlice({
         setAppStatusAC(state, action: PayloadAction<{status: RequestStatusType}>) {
             state.status = action.payload.status
         },
-        setAppInitializedAC(state, action: PayloadAction<{initialized: boolean}>) {
-            state.isInitialized = action.payload.initialized
-        }
+    },
+    extraReducers: builder => {
+        builder.addCase(initializeAppTC.fulfilled, (state) => {
+            state.isInitialized = true
+        })
     }
 })
 
 
 
 
-export const {setAppErrorAC, setAppStatusAC, setAppInitializedAC} = appSlice.actions
+export const {setAppErrorAC, setAppStatusAC} = appSlice.actions
 export const appReducer = appSlice.reducer
 
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    authAPI.me().then(res => {
-        if (res.data.resultCode === 0) {
-            dispatch(setIsLoggedInAC({isLoggedIn: true}));
-        } else {
 
-        }
-
-        dispatch(setAppInitializedAC({initialized: true}));
-    })
-}
 
 
 

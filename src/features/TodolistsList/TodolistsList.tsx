@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {AppRootStateType} from '../../app/store'
 import {
     addTodolistTC,
@@ -15,7 +15,7 @@ import {TaskStatuses} from '../../api/todolists-api'
 import {Grid, Paper} from '@material-ui/core'
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm'
 import {Todolist} from './Todolist/Todolist'
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import {useAppDispatch} from "../../hooks/hooks";
 
 type PropsType = {
@@ -37,23 +37,23 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         dispatch(thunk)
     }, [])
 
-    const removeTask = useCallback(function (id: string, todolistId: string) {
-        const thunk = removeTaskTC(id, todolistId)
+    const removeTask = useCallback(function (taskId: string, todolistId: string) {
+        const thunk = removeTaskTC({taskId, todolistId})
         dispatch(thunk)
     }, [])
 
     const addTask = useCallback(function (title: string, todolistId: string) {
-        const thunk = addTaskTC(title, todolistId)
+        const thunk = addTaskTC({title, todolistId})
         dispatch(thunk)
     }, [])
 
-    const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        const thunk = updateTaskTC(id, {status}, todolistId)
+    const changeStatus = useCallback(function (taskId: string, status: TaskStatuses, todolistId: string) {
+        const thunk = updateTaskTC({taskId, model: {status}, todolistId})
         dispatch(thunk)
     }, [])
 
-    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-        const thunk = updateTaskTC(id, {title: newTitle}, todolistId)
+    const changeTaskTitle = useCallback(function (taskId: string, newTitle: string, todolistId: string) {
+        const thunk = updateTaskTC({taskId, model: {title: newTitle}, todolistId})
         dispatch(thunk)
     }, [])
 
@@ -68,7 +68,7 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     }, [])
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
-        const thunk = changeTodolistTitleTC(id, title)
+        const thunk = changeTodolistTitleTC({id, title})
         dispatch(thunk)
     }, [])
 

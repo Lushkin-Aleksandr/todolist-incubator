@@ -4,6 +4,7 @@ import thunkMiddleware, {ThunkDispatch} from 'redux-thunk'
 import {appReducer} from './app-reducer'
 import {authReducer} from '../features/Login/auth-reducer'
 import {configureStore} from "@reduxjs/toolkit";
+import {useDispatch} from "react-redux";
 
 
 export const store = configureStore({
@@ -13,12 +14,11 @@ export const store = configureStore({
         app: appReducer,
         auth: authReducer
     },
-    middleware: [thunkMiddleware]
 })
 
 export type AppRootStateType = ReturnType<typeof store.getState>
 
-export type AppDispatchType = ThunkDispatch<AppRootStateType, unknown, any>
+export type AppDispatchType = typeof store.dispatch
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore

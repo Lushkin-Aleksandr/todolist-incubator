@@ -11,41 +11,42 @@ import {
     Typography
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
-import {TodolistsList} from '../features/TodolistsList'
+import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {useDispatch, useSelector} from 'react-redux'
-import {appActions} from '../features/Application'
-import {Route} from 'react-router-dom'
-import {authActions, Login} from '../features/Auth'
-import {selectIsInitialized, selectStatus} from '../features/Application/selectors'
-import {authSelectors} from '../features/Auth'
-import {useActions} from '../utils/redux-utils'
+import {AppRootStateType} from './store'
+import {initializeAppTC, RequestStatusType} from './app-reducer'
+import {BrowserRouter, Route} from 'react-router-dom'
+import {Login} from '../features/Login/Login'
+import {logoutTC} from '../features/Login/auth-reducer'
 
-type PropsType = {}
+type PropsType = {
+    demo?: boolean
+}
 
-function App(props: PropsType) {
-    const status = useSelector(selectStatus)
-    const isInitialized = useSelector(selectIsInitialized)
-    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
+function App({demo = false}: PropsType) {
+    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+    const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const dispatch = useDispatch()
 
-    const {logout} = useActions(authActions)
-    const {initializeApp} = useActions(appActions)
     useEffect(() => {
-        if (!isInitialized) {
-            initializeApp()
-        }
-    }, []);
+        dispatch(initializeAppTC())
+    }, [])
 
     const logoutHandler = useCallback(() => {
-        logout()
+        dispatch(logoutTC())
     }, [])
+
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress/>
         </div>
     }
+
     return (
+        <BrowserRouter>
             <div className="App">
                 <ErrorSnackbar/>
                 <AppBar position="static">
@@ -61,10 +62,11 @@ function App(props: PropsType) {
                     {status === 'loading' && <LinearProgress/>}
                 </AppBar>
                 <Container fixed>
-                    <Route exact path={'/'} render={() => <TodolistsList demo={false}/>}/>
+                    <Route exact path={'/'} render={() => <TodolistsList demo={demo}/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
                 </Container>
             </div>
+        </BrowserRouter>
     )
 }
 

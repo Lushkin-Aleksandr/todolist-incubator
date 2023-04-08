@@ -98,31 +98,29 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     return <Redirect to={"/login"}/>
   }
 
-  return <div ref={pageRef} style={{height: '100%',padding: '20px', display: "flex", flexDirection: 'column'}}>
-    <div style={{marginBottom: '20px'}}>
+  return <div ref={pageRef} style={{height: '100%', padding: '20px', display: "flex", flexDirection: 'column'}}>
+    <div style={{maxWidth: '250px', marginBottom: '20px'}}>
       <AddItemForm addItem={addTodolist}/>
     </div>
-    <div ref={todolistsContainerRef} style={{flex: '1', display: 'flex', gap: '20px', overflowX: 'scroll'}}>
+    <div ref={todolistsContainerRef} style={{flex: '1', display: 'flex', alignItems: 'flex-start', gap: '20px', overflowX: 'scroll', padding: '5px'}}>
       {
         todolists.map(tl => {
           let allTodolistTasks = tasks[tl.id]
 
-          return <Grid item key={tl.id}>
-            <Paper style={{padding: '10px', width: '300px'}}>
-              <Todolist
-                todolist={tl}
-                tasks={allTodolistTasks}
-                removeTask={handleRemoveTask}
-                changeFilter={changeFilter}
-                addTask={handleAddTask}
-                changeTaskStatus={changeStatus}
-                removeTodolist={removeTodolist}
-                changeTaskTitle={changeTaskTitle}
-                changeTodolistTitle={changeTodolistTitle}
-                demo={demo}
-              />
-            </Paper>
-          </Grid>
+          return <Paper key={tl.id} elevation={3} style={{padding: '10px', flex: '1 0 auto'}}>
+            <Todolist
+              todolist={tl}
+              tasks={allTodolistTasks}
+              removeTask={handleRemoveTask}
+              changeFilter={changeFilter}
+              addTask={handleAddTask}
+              changeTaskStatus={changeStatus}
+              removeTodolist={removeTodolist}
+              changeTaskTitle={changeTaskTitle}
+              changeTodolistTitle={changeTodolistTitle}
+              demo={demo}
+            />
+          </Paper>
         })
       }
     </div>

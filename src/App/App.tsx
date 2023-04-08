@@ -1,16 +1,6 @@
 import React, {useCallback, useEffect} from 'react'
 import './App.css'
-import {
-    AppBar,
-    Button,
-    CircularProgress,
-    Container,
-    IconButton,
-    LinearProgress,
-    Toolbar,
-    Typography
-} from '@material-ui/core'
-import {Menu} from '@material-ui/icons'
+import {AppBar, Button, CircularProgress, Container, LinearProgress, Toolbar, Typography} from '@material-ui/core'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {useDispatch, useSelector} from 'react-redux'
@@ -51,21 +41,18 @@ function App({demo = false}: PropsType) {
             <div className="App">
                 <ErrorSnackbar/>
                 <AppBar position="static">
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu">
-                            <Menu/>
-                        </IconButton>
+                    <Toolbar style={{justifyContent: 'space-between'}}>
                         <Typography variant="h6">
-                            News
+                            Todo
                         </Typography>
                         {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
                     </Toolbar>
                     {status === 'loading' && <LinearProgress/>}
                 </AppBar>
-                <Container fixed>
+                <main style={{flex: '1'}}>
                     <Route exact path={'/'} render={() => <TodolistsList demo={demo}/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
-                </Container>
+                </main>
             </div>
         </BrowserRouter>
     )

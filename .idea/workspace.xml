@@ -4,12 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89079185-ee32-435a-9446-ec3e1d7f6a6a" name="Changes" comment="fix(root): update project for redux-saga">
+    <list default="true" id="89079185-ee32-435a-9446-ec3e1d7f6a6a" name="Changes" comment="feat(TodolistList): create horizontal layout with horizontal scroll">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/features/Login/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/Login/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddItemForm/AddItemForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddItemForm/AddItemForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/EditableSpan/EditableSpan.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/EditableSpan/EditableSpan.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/TodolistsList/Todolist/Task/Task.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/TodolistsList/Todolist/Task/Task.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/features/TodolistsList/Todolist/Todolist.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/TodolistsList/Todolist/Todolist.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/features/TodolistsList/TodolistsList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/TodolistsList/TodolistsList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +142,7 @@
       <workItem from="1674227065432" duration="13311000" />
       <workItem from="1674321145594" duration="5370000" />
       <workItem from="1678281251350" duration="73000" />
-      <workItem from="1680947257397" duration="17176000" />
+      <workItem from="1680947257397" duration="20190000" />
     </task>
     <task id="LOCAL-00001" summary="fix(root): update project for redux-saga">
       <created>1674227532020</created>
@@ -148,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674227532020</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat(TodolistList): create horizontal layout with horizontal scroll">
+      <created>1680978417014</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680978417014</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,6 +177,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix(root): update project for redux-saga" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(root): update project for redux-saga" />
+    <MESSAGE value="feat(TodolistList): create horizontal layout with horizontal scroll" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(TodolistList): create horizontal layout with horizontal scroll" />
   </component>
 </project>

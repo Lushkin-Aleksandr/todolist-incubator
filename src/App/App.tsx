@@ -13,7 +13,7 @@ import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
 import { RequestStatusType } from './app-reducer'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { Login } from '../features/Login/Login'
 import { logoutTC } from '../features/Login/auth-reducer'
 import { initializeApp } from './app-sagas'
@@ -45,26 +45,24 @@ function App({ demo = false }: PropsType) {
   }
 
   return (
-    <BrowserRouter>
-      <div className={s.app}>
-        <ErrorSnackbar />
-        <AppBar position="static">
-          <Toolbar className={s.toolbar}>
-            <Typography variant="h6">Todo</Typography>
-            {isLoggedIn && (
-              <Button color="inherit" onClick={logoutHandler}>
-                Log out
-              </Button>
-            )}
-          </Toolbar>
-          {status === 'loading' && <LinearProgress />}
-        </AppBar>
-        <main className={s.main}>
-          <Route exact path={'/'} render={() => <TodolistsList demo={demo} />} />
-          <Route path={'/login'} render={() => <Login />} />
-        </main>
-      </div>
-    </BrowserRouter>
+    <div className={s.app}>
+      <ErrorSnackbar />
+      <AppBar position="static">
+        <Toolbar className={s.toolbar}>
+          <Typography variant="h6">Todo</Typography>
+          {isLoggedIn && (
+            <Button color="inherit" onClick={logoutHandler}>
+              Log out
+            </Button>
+          )}
+        </Toolbar>
+        {status === 'loading' && <LinearProgress />}
+      </AppBar>
+      <main className={s.main}>
+        <Route exact path={'/'} render={() => <TodolistsList demo={demo} />} />
+        <Route path={'/login'} render={() => <Login />} />
+      </main>
+    </div>
   )
 }
 

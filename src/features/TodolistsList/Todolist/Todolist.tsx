@@ -72,10 +72,10 @@ export const Todolist = React.memo(function ({ demo = false, ...props }: PropsTy
         e.stopPropagation()
       }
     }
-    container!.addEventListener('wheel', handleScroll)
+    container?.addEventListener('wheel', handleScroll)
 
     return () => {
-      container!.removeEventListener('wheel', handleScroll)
+      container?.removeEventListener('wheel', handleScroll)
     }
   }, [])
 

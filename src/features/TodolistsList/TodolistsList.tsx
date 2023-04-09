@@ -92,10 +92,10 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
       e.preventDefault()
       container!.scrollLeft += e.deltaY
     }
-    page!.addEventListener('wheel', handleScroll)
+    page?.addEventListener('wheel', handleScroll)
 
     return () => {
-      page!.removeEventListener('wheel', handleScroll)
+      page?.removeEventListener('wheel', handleScroll)
     }
   }, [])
 

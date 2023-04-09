@@ -1,0 +1,26 @@
+.todolistList {
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.addItemWrapper {
+    max-width: 250px;
+    margin-bottom: 20px;
+}
+
+.todolistsContainer {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    overflow-x: scroll;
+    padding: 5px;
+}
+
+.todoListWrapper {
+    padding: 10px;
+    flex: 1 0 auto;
+}

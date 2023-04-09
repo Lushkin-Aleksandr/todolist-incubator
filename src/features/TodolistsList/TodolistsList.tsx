@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useRef} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType} from '../../app/store'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppRootStateType } from '../../app/store'
 import {
   addTodolistTC,
   changeTodolistFilterAC,
@@ -8,22 +8,25 @@ import {
   fetchTodolistsTC,
   FilterValuesType,
   removeTodolistTC,
-  TodolistDomainType
+  TodolistDomainType,
 } from './todolists-reducer'
-import {TasksStateType} from './tasks-reducer'
-import {TaskStatuses} from '../../api/todolists-api'
-import {Grid, Paper} from '@material-ui/core'
-import {AddItemForm} from '../../components/AddItemForm/AddItemForm'
-import {Todolist} from './Todolist/Todolist'
-import {Redirect} from 'react-router-dom'
-import {addTask, removeTask, updateTask} from "./tasks-sagas";
+import { TasksStateType } from './tasks-reducer'
+import { TaskStatuses } from '../../api/todolists-api'
+import { Paper } from '@material-ui/core'
+import { AddItemForm } from '../../components/AddItemForm/AddItemForm'
+import { Todolist } from './Todolist/Todolist'
+import { Redirect } from 'react-router-dom'
+import { addTask, removeTask, updateTask } from './tasks-sagas'
+import s from './TodolistsList.module.css'
 
 type PropsType = {
   demo?: boolean
 }
 
-export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
-  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
+  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(
+    state => state.todolists
+  )
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
   const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
@@ -31,7 +34,7 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
 
   useEffect(() => {
     if (demo || !isLoggedIn) {
-      return;
+      return
     }
     const thunk = fetchTodolistsTC()
     dispatch(thunk)
@@ -42,17 +45,16 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
   }, [])
 
   const handleAddTask = useCallback(function (title: string, todolistId: string) {
-
     dispatch(addTask(title, todolistId))
   }, [])
 
   const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-    const thunk = updateTask(id, {status}, todolistId)
+    const thunk = updateTask(id, { status }, todolistId)
     dispatch(thunk)
   }, [])
 
   const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-    const thunk = updateTask(id, {title: newTitle}, todolistId)
+    const thunk = updateTask(id, { title: newTitle }, todolistId)
     dispatch(thunk)
   }, [])
 
@@ -71,10 +73,13 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     dispatch(thunk)
   }, [])
 
-  const addTodolist = useCallback((title: string) => {
-    const thunk = addTodolistTC(title)
-    dispatch(thunk)
-  }, [dispatch])
+  const addTodolist = useCallback(
+    (title: string) => {
+      const thunk = addTodolistTC(title)
+      dispatch(thunk)
+    },
+    [dispatch]
+  )
 
   const todolistsContainerRef = useRef<HTMLDivElement>(null)
   const pageRef = useRef<HTMLDivElement>(null)
@@ -92,37 +97,39 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     return () => {
       page!.removeEventListener('wheel', handleScroll)
     }
-  }, []);
+  }, [])
 
   if (!isLoggedIn) {
-    return <Redirect to={"/login"}/>
+    return <Redirect to={'/login'} />
   }
 
-  return <div ref={pageRef} style={{height: '100%', padding: '20px', display: "flex", flexDirection: 'column'}}>
-    <div style={{maxWidth: '250px', marginBottom: '20px'}}>
-      <AddItemForm addItem={addTodolist}/>
-    </div>
-    <div ref={todolistsContainerRef} style={{flex: '1', display: 'flex', alignItems: 'flex-start', gap: '20px', overflowX: 'scroll', padding: '5px'}}>
-      {
-        todolists.map(tl => {
+  return (
+    <div ref={pageRef} className={s.todolistList}>
+      <div className={s.addItemWrapper}>
+        <AddItemForm addItem={addTodolist} />
+      </div>
+      <div ref={todolistsContainerRef} className={s.todolistsContainer}>
+        {todolists.map(tl => {
           let allTodolistTasks = tasks[tl.id]
 
-          return <Paper key={tl.id} elevation={3} style={{padding: '10px', flex: '1 0 auto'}}>
-            <Todolist
-              todolist={tl}
-              tasks={allTodolistTasks}
-              removeTask={handleRemoveTask}
-              changeFilter={changeFilter}
-              addTask={handleAddTask}
-              changeTaskStatus={changeStatus}
-              removeTodolist={removeTodolist}
-              changeTaskTitle={changeTaskTitle}
-              changeTodolistTitle={changeTodolistTitle}
-              demo={demo}
-            />
-          </Paper>
-        })
-      }
+          return (
+            <Paper key={tl.id} elevation={3} className={s.todoListWrapper}>
+              <Todolist
+                todolist={tl}
+                tasks={allTodolistTasks}
+                removeTask={handleRemoveTask}
+                changeFilter={changeFilter}
+                addTask={handleAddTask}
+                changeTaskStatus={changeStatus}
+                removeTodolist={removeTodolist}
+                changeTaskTitle={changeTaskTitle}
+                changeTodolistTitle={changeTodolistTitle}
+                demo={demo}
+              />
+            </Paper>
+          )
+        })}
+      </div>
     </div>
-  </div>
+  )
 }

@@ -1,0 +1,14 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+
+.formHolder {
+  padding: 20px;
+}
+
+.title {
+  margin-bottom: 10px !important;
+}

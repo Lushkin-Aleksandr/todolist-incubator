@@ -1,0 +1,21 @@
+.todolist {
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tasks {
+  overflow-y: scroll;
+}
+
+.filterContainer {
+  padding: 10px;
+  display: flex;
+  gap: 5px;
+}

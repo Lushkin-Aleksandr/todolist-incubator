@@ -1,95 +1,93 @@
 import React from 'react'
 import {
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormLabel,
-    TextField,
-    Button,
-    Grid,
-    Paper, Typography
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Paper,
+  TextField,
+  Typography,
 } from '@material-ui/core'
-import {useFormik} from 'formik'
-import {useDispatch, useSelector} from 'react-redux'
-import {loginTC} from './auth-reducer'
-import {AppRootStateType} from '../../app/store'
+import { useFormik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginTC } from './auth-reducer'
+import { AppRootStateType } from '../../app/store'
 import { Redirect } from 'react-router-dom'
+import s from './Login.module.css'
 
 export const Login = () => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
-    const formik = useFormik({
-        validate: (values) => {
-            if (!values.email) {
-                return {
-                    email: 'Email is required'
+  const formik = useFormik({
+    validate: values => {
+      if (!values.email) {
+        return {
+          email: 'Email is required',
+        }
+      }
+      if (!values.password) {
+        return {
+          password: 'Password is required',
+        }
+      }
+    },
+    initialValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+    onSubmit: values => {
+      dispatch(loginTC(values))
+    },
+  })
+
+  if (isLoggedIn) {
+    return <Redirect to={'/'} />
+  }
+
+  return (
+    <div className={s.login}>
+      <Paper className={s.formHolder}>
+        <form onSubmit={formik.handleSubmit}>
+          <FormControl>
+            <FormLabel>
+              <Typography variant="h4" className={s.title}>
+                SIGN IN
+              </Typography>
+              <p>To log in use common test account credentials:</p>
+              <p> Email: free@samuraijs.com</p>
+              <p>Password: free</p>
+            </FormLabel>
+            <FormGroup>
+              <TextField label="Email" margin="normal" {...formik.getFieldProps('email')} />
+              {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+              <TextField
+                type="password"
+                label="Password"
+                margin="normal"
+                {...formik.getFieldProps('password')}
+              />
+              {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+              <FormControlLabel
+                label={'Remember me'}
+                control={
+                  <Checkbox
+                    {...formik.getFieldProps('rememberMe')}
+                    checked={formik.values.rememberMe}
+                  />
                 }
-            }
-            if (!values.password) {
-                return {
-                    password: 'Password is required'
-                }
-            }
-
-        },
-        initialValues: {
-            email: '',
-            password: '',
-            rememberMe: false
-        },
-        onSubmit: values => {
-            dispatch(loginTC(values));
-        },
-    })
-
-    if (isLoggedIn) {
-        return <Redirect to={"/"} />
-    }
-
-
-    return <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%'}}>
-        <Paper style={{padding: '20px'}}>
-            <form onSubmit={formik.handleSubmit}>
-                <FormControl>
-                    <FormLabel>
-                        <Typography variant='h4' style={{marginBottom: '10px'}}>SIGN IN</Typography>
-                        <p>
-                            To log in use common test account credentials:
-                        </p>
-                        <p> Email: free@samuraijs.com
-                        </p>
-                        <p>
-                            Password: free
-                        </p>
-                    </FormLabel>
-                    <FormGroup>
-                        <TextField
-                          label="Email"
-                          margin="normal"
-                          {...formik.getFieldProps("email")}
-                        />
-                        {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-                        <TextField
-                          type="password"
-                          label="Password"
-                          margin="normal"
-                          {...formik.getFieldProps("password")}
-                        />
-                        {formik.errors.password ? <div>{formik.errors.password}</div> : null}
-                        <FormControlLabel
-                          label={'Remember me'}
-                          control={<Checkbox
-                            {...formik.getFieldProps("rememberMe")}
-                            checked={formik.values.rememberMe}
-                          />}
-                        />
-                        <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
-                    </FormGroup>
-                </FormControl>
-            </form>
-        </Paper>
+              />
+              <Button type={'submit'} variant={'contained'} color={'primary'}>
+                Login
+              </Button>
+            </FormGroup>
+          </FormControl>
+        </form>
+      </Paper>
     </div>
+  )
 }
